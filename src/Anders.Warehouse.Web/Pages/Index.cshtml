@@ -1,0 +1,98 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Overblik";
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+{
+    <div class="alert">@Model.StatusMessage</div>
+}
+
+<div class="actions">
+    <form method="post" asp-page-handler="RunPriceMonitor">
+        <button class="btn" type="submit">Kør prisovervågning nu</button>
+    </form>
+    <button class="btn btn-primary" type="button" onclick="document.getElementById('uploadPdf').scrollIntoView({behavior:'smooth'})">Tilføj bilag</button>
+</div>
+
+<section class="cards">
+    <article class="card"><div class="muted">Produkter</div><div class="metric">@Model.Dashboard.ProductCount</div></article>
+    <article class="card"><div class="muted">Fakturaer</div><div class="metric">@Model.Dashboard.InvoiceCount</div></article>
+    <article class="card"><div class="muted">Lager i alt</div><div class="metric ok">@Model.Dashboard.TotalStock</div></article>
+    <article class="card"><div class="muted">Notifikationer</div><div class="metric warn">@Model.Dashboard.NotificationCount</div></article>
+</section>
+
+<section class="grid">
+    <div class="panel">
+        <h2>Lagerbevægelse (seneste 6 transaktioner)</h2>
+        <div class="bars">
+            @foreach (var b in Model.Dashboard.ChartPoints)
+            {
+                <div class="bar-col" title="@b.Label">
+                    <div class="bar in" style="height:@b.InHeight%"></div>
+                    <div class="bar out" style="height:@b.OutHeight%"></div>
+                </div>
+            }
+        </div>
+        <div class="muted">Grøn = IN, Rød = OUT</div>
+    </div>
+
+    <div class="panel" id="uploadPdf">
+        <h3>Upload indkøbs-PDF</h3>
+        <form method="post" enctype="multipart/form-data" asp-page-handler="UploadPurchase">
+            <div class="form-group">
+                <label asp-for="UploadPdf">PDF fil</label>
+                <input asp-for="UploadPdf" type="file" accept="application/pdf" />
+            </div>
+            <button class="btn btn-primary" type="submit">Upload og parse</button>
+        </form>
+
+        <h3>Opret virksomhed</h3>
+        <form method="post" asp-page-handler="CreateTenant">
+            <div class="form-group">
+                <label asp-for="TenantName">Virksomhedsnavn</label>
+                <input asp-for="TenantName" />
+            </div>
+            <button class="btn" type="submit">Opret virksomhed</button>
+        </form>
+    </div>
+</section>
+
+<section class="grid" style="margin-top:14px">
+    <div class="panel">
+        <h2>Registrér salg (OUT)</h2>
+        <form method="post" asp-page-handler="RegisterSale">
+            <div class="form-group">
+                <label asp-for="SaleProductId">Produkt</label>
+                <select asp-for="SaleProductId" asp-items="Model.ProductOptions"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SaleQuantity">Antal</label>
+                <input asp-for="SaleQuantity" type="number" step="0.01" min="0.01" />
+            </div>
+            <div class="form-group">
+                <label asp-for="SaleDate">Dato</label>
+                <input asp-for="SaleDate" type="date" />
+            </div>
+            <div class="form-group">
+                <label asp-for="SaleNote">Note</label>
+                <input asp-for="SaleNote" />
+            </div>
+            <button class="btn btn-primary" type="submit">Registrér salg</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h2>Seneste lagerbalance</h2>
+        <table class="table">
+            <thead><tr><th>Produkt</th><th>Antal</th></tr></thead>
+            <tbody>
+            @foreach (var row in Model.Dashboard.Balances)
+            {
+                <tr><td>@row.ProductName</td><td>@row.Quantity</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

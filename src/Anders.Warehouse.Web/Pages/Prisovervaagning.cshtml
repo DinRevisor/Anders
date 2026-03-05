@@ -1,0 +1,31 @@
+@page
+@model Anders.Warehouse.Web.Pages.PrisovervaagningModel
+@{
+    ViewData["Title"] = "Prisovervågning";
+}
+
+<div class="panel">
+    <h2>Prisovervågning</h2>
+    <p class="muted">Aktive monitors og seneste snapshots.</p>
+
+    <div class="actions">
+        <form method="post">
+            <button class="btn btn-primary" type="submit">Kør overvågning nu</button>
+        </form>
+    </div>
+
+    <table class="table">
+        <thead><tr><th>Produkt</th><th>Threshold %</th><th>Retning</th><th>Frekvens</th></tr></thead>
+        <tbody>
+        @foreach (var m in Model.Monitors)
+        {
+            <tr>
+                <td>@m.ProductName</td>
+                <td>@m.ThresholdPercent</td>
+                <td>@m.Direction</td>
+                <td>@m.Frequency</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

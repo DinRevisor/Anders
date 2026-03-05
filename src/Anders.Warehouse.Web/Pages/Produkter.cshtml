@@ -1,0 +1,23 @@
+@page
+@model Anders.Warehouse.Web.Pages.ProdukterModel
+@{
+    ViewData["Title"] = "Produkter";
+}
+
+<div class="panel">
+    <h2>Produkter</h2>
+    <p class="muted">Overblik over produkter og leverandører.</p>
+    <table class="table">
+        <thead><tr><th>Navn</th><th>Leverandør</th><th>Oprettet</th></tr></thead>
+        <tbody>
+        @foreach (var p in Model.Products)
+        {
+            <tr>
+                <td>@p.Name</td>
+                <td>@p.SupplierName</td>
+                <td>@p.CreatedAt.ToString("dd-MM-yyyy")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

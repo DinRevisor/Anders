@@ -1,0 +1,24 @@
+@page
+@model Anders.Warehouse.Web.Pages.FakturaerModel
+@{
+    ViewData["Title"] = "Fakturaer";
+}
+
+<div class="panel">
+    <h2>Indkøbsfakturaer</h2>
+    <p class="muted">Seneste uploadede bilag og parse-status.</p>
+    <table class="table">
+        <thead><tr><th>Dato</th><th>Leverandør</th><th>Linjer</th><th>Total</th></tr></thead>
+        <tbody>
+        @foreach (var i in Model.Invoices)
+        {
+            <tr>
+                <td>@i.InvoiceDate.ToString("dd-MM-yyyy")</td>
+                <td>@i.SupplierName</td>
+                <td>@i.Lines.Count</td>
+                <td>@(i.TotalPrice?.ToString("0.00") ?? "-")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
