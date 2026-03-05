@@ -57,7 +57,9 @@ public class GoogleProductImageService(IBlobStorageService blobStorageService, I
         var query = $"{product.Name} {product.SupplierName}";
         var fakeImage = new MemoryStream(new byte[] { 1, 2, 3, 4 });
         var blob = await blobStorageService.UploadAsync("product-images", $"{product.Id}.jpg", fakeImage, ct);
-        return $"{blob}?src=google&q={Uri.EscapeDataString(query)}";
+        var minW = options.Value.MinWidth;
+        var minH = options.Value.MinHeight;
+        return $"{blob}?src=google&q={Uri.EscapeDataString(query)}&minW={minW}&minH={minH}";
     }
 }
 
