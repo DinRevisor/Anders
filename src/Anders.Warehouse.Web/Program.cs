@@ -19,7 +19,17 @@ builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration
 builder.Services.Configure<GoogleSearchOptions>(builder.Configuration.GetSection("GoogleSearch"));
 builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Storage"));
 
-var dbProvider = builder.Configuration.GetValue<string>("DatabaseProvider") ?? "Sqlite";
+var configuredProvider = builder.Configuration.GetValue<string>("DatabaseProvider") ?? "Sqlite";
+var forceSqlServerInDevelopment = builder.Configuration.GetValue<bool>("Database:ForceSqlServerInDevelopment");
+var enableSqlServer = builder.Configuration.GetValue<bool>("Database:EnableSqlServer");
+
+var useSqlServer = configuredProvider.Equals("SqlServer", StringComparison.OrdinalIgnoreCase) && enableSqlServer;
+if (builder.Environment.IsDevelopment() && !forceSqlServerInDevelopment)
+{
+    useSqlServer = false;
+}
+
+var dbProvider = useSqlServer ? "SqlServer" : "Sqlite";
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? "Data Source=warehouse-dev.db";
 
@@ -45,7 +55,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
-var isSqlServer = dbProvider.Equals("SqlServer", StringComparison.OrdinalIgnoreCase);
+var isSqlServer = useSqlServer;
 var enableHangfire = builder.Configuration.GetValue<bool?>("Hangfire:Enabled") ?? isSqlServer;
 
 if (enableHangfire)
@@ -77,7 +87,16 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.EnsureCreated();
+
+    if (isSqlServer)
+    {
+        await db.Database.MigrateAsync();
+    }
+    else
+    {
+        db.Database.EnsureCreated();
+    }
+
     await SeedData.InitializeAsync(scope.ServiceProvider);
 }
 

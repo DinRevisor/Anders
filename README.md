@@ -32,6 +32,8 @@ dotnet run
 
 Environment-specific config:
 - `appsettings.Development.json`: uses `Sqlite` + `Hangfire:Enabled=false`
+- `Database:EnableSqlServer`: must be `true` before app will use SQL Server provider
+- `Database:ForceSqlServerInDevelopment`: keep `false` for local safety (set `true` only if local SQL Server is intentionally used)
 - `appsettings.Production.json`: expects `SqlServer` + `Hangfire:Enabled=true`
 
 App URLs:
@@ -43,6 +45,8 @@ App URLs:
 Set in `appsettings.json` / user-secrets / Azure App Configuration:
 - `ConnectionStrings:DefaultConnection` (Azure SQL in prod)
 - `DatabaseProvider` (set per environment in `appsettings.Development.json` / `appsettings.Production.json`)
+- `Database:EnableSqlServer` (global guard; SQL Server only used when this is `true`)
+- `Database:ForceSqlServerInDevelopment` (overrides dev safety guard when set to `true`)
 - `Storage:BlobConnectionString`
 - `Storage:BlobBaseUrl`
 - `GoogleSearch:ApiKey`
@@ -53,7 +57,7 @@ Set in `appsettings.json` / user-secrets / Azure App Configuration:
 
 ## Azure Deployment Notes
 1. Azure App Service + Azure SQL + Azure Blob Storage + Key Vault.
-2. Set `DatabaseProvider=SqlServer` and SQL connection string.
+2. Set `DatabaseProvider=SqlServer`, `Database:EnableSqlServer=true`, and SQL connection string.
 3. Run migrations on deploy pipeline (`dotnet ef database update`).
 4. Enable Managed Identity and Key Vault access policies.
 5. Configure Hangfire storage to SQL and keep always-on enabled.
