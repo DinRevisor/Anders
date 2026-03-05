@@ -45,13 +45,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
-builder.Services.AddHangfire(config => config.UseSimpleAssemblyNameTypeSerializer()
-    .UseRecommendedSerializerSettings()
-    .UseSqlServerStorage(connectionString, new SqlServerStorageOptions
-    {
-        PrepareSchemaIfNecessary = true
-    }));
-builder.Services.AddHangfireServer();
+var isSqlServer = dbProvider.Equals("SqlServer", StringComparison.OrdinalIgnoreCase);
+var enableHangfire = builder.Configuration.GetValue<bool?>("Hangfire:Enabled") ?? isSqlServer;
+
+if (enableHangfire)
+{
+    builder.Services.AddHangfire(config => config.UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(connectionString, new SqlServerStorageOptions
+        {
+            PrepareSchemaIfNecessary = true
+        }));
+    builder.Services.AddHangfireServer();
+}
 
 builder.Services.AddScoped<ITenantProvider, HttpTenantProvider>();
 builder.Services.AddScoped<IAuditService, AuditService>();
@@ -88,8 +94,11 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHangfireDashboard("/hangfire");
-RecurringJob.AddOrUpdate<WeeklyPriceMonitorJob>("weekly-price-monitor", x => x.RunAsync(), Cron.Weekly);
+if (enableHangfire)
+{
+    app.UseHangfireDashboard("/hangfire");
+    RecurringJob.AddOrUpdate<WeeklyPriceMonitorJob>("weekly-price-monitor", x => x.RunAsync(), Cron.Weekly);
+}
 
 app.MapRazorPages();
 app.MapControllers();

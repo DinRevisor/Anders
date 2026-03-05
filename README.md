@@ -21,11 +21,18 @@ Production-ready MVP scaffold for multi-tenant warehouse management on ASP.NET C
 ```bash
 # if .NET SDK is installed
 cd src/Anders.Warehouse.Web
+# optional explicit environment
+export ASPNETCORE_ENVIRONMENT=Development
+
 dotnet restore
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 dotnet run
 ```
+
+Environment-specific config:
+- `appsettings.Development.json`: uses `Sqlite` + `Hangfire:Enabled=false`
+- `appsettings.Production.json`: expects `SqlServer` + `Hangfire:Enabled=true`
 
 App URLs:
 - `/` dashboard
@@ -35,12 +42,13 @@ App URLs:
 ## Key Config Values
 Set in `appsettings.json` / user-secrets / Azure App Configuration:
 - `ConnectionStrings:DefaultConnection` (Azure SQL in prod)
-- `DatabaseProvider` (`SqlServer` for prod, `Sqlite` local)
+- `DatabaseProvider` (set per environment in `appsettings.Development.json` / `appsettings.Production.json`)
 - `Storage:BlobConnectionString`
 - `Storage:BlobBaseUrl`
 - `GoogleSearch:ApiKey`
 - `GoogleSearch:Cx`
 - `KeyVault:VaultUri`
+- `Hangfire:Enabled` (set per environment; false in Development, true in Production)
 - `Secrets:*` (local fallback for credentials used by price source)
 
 ## Azure Deployment Notes
