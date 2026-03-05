@@ -32,6 +32,7 @@ dotnet run
 
 Environment-specific config:
 - `appsettings.Development.json`: uses `Sqlite` + `Hangfire:Enabled=false`
+- `Database:ForceSqlServerInDevelopment`: keep `false` for local safety (set `true` only if local SQL Server is intentionally used)
 - `appsettings.Production.json`: expects `SqlServer` + `Hangfire:Enabled=true`
 
 App URLs:
@@ -43,6 +44,7 @@ App URLs:
 Set in `appsettings.json` / user-secrets / Azure App Configuration:
 - `ConnectionStrings:DefaultConnection` (Azure SQL in prod)
 - `DatabaseProvider` (set per environment in `appsettings.Development.json` / `appsettings.Production.json`)
+- `Database:ForceSqlServerInDevelopment` (overrides dev safety guard when set to `true`)
 - `Storage:BlobConnectionString`
 - `Storage:BlobBaseUrl`
 - `GoogleSearch:ApiKey`
