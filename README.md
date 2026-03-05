@@ -17,6 +17,16 @@ Production-ready MVP scaffold for multi-tenant warehouse management on ASP.NET C
 6. Upload agreement + rules (entity support) -> validate next invoice and create deviation report.
 7. Price monitor definitions + Hangfire weekly runner -> snapshots + notifications.
 
+## UI (klikbar dashboard)
+- Nyt admin-dashboard med venstremenu/topbar i stil med dit reference-design.
+- Knap-baserede flows direkte i UI:
+  - Upload indkøbs-PDF
+  - Opret virksomhed
+  - Registrér salg (OUT)
+  - Kør prisovervågning manuelt
+- Dashboard viser nøgletal, lagerbevægelse og seneste balancer.
+- Separate menupunkter/sider: Overblik, Produkter, Fakturaer, Aftaler, Prisovervågning.
+
 ## Local Run
 ```bash
 # if .NET SDK is installed

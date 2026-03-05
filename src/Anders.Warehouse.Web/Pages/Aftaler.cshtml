@@ -1,0 +1,23 @@
+@page
+@model Anders.Warehouse.Web.Pages.AftalerModel
+@{
+    ViewData["Title"] = "Aftaler";
+}
+
+<div class="panel">
+    <h2>Indkøbsaftaler</h2>
+    <p class="muted">Aftaler og tilknyttede regler.</p>
+    <table class="table">
+        <thead><tr><th>Leverandør</th><th>Regler</th><th>Oprettet</th></tr></thead>
+        <tbody>
+        @foreach (var a in Model.Agreements)
+        {
+            <tr>
+                <td>@a.SupplierName</td>
+                <td>@a.Rules.Count</td>
+                <td>@a.CreatedAt.ToString("dd-MM-yyyy")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

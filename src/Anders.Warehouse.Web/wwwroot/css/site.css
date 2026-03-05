@@ -1,0 +1,39 @@
+:root {
+    --nav:#234b6f;
+    --top:#041e36;
+    --bg:#eef1f4;
+    --card:#ffffff;
+    --text:#0f1b2d;
+    --muted:#6b7a90;
+    --primary:#66b4cb;
+    --ok:#41a541;
+    --warn:#f0aa2f;
+}
+*{box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif}
+body{margin:0;background:var(--bg);color:var(--text)}
+.app-shell{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.sidebar{background:var(--nav);padding:18px 14px;display:flex;flex-direction:column;gap:10px}
+.brand{color:#fff;font-weight:700;font-size:28px;margin-bottom:20px}
+.brand span{font-size:32px;vertical-align:middle}
+.nav-item{color:#dbe9f8;text-decoration:none;padding:12px;border-radius:8px;display:block;font-weight:600}
+.nav-item:hover{background:#2f5e88}
+.topbar{background:var(--top);color:#fff;padding:18px 28px;display:flex;justify-content:space-between;align-items:center}
+.avatar{background:#d6d6d6;color:#313131;border-radius:999px;width:42px;height:42px;display:grid;place-items:center;font-weight:700}
+.content{padding:26px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.btn{border:1px solid #38516e;padding:12px 18px;border-radius:8px;background:#fff;color:#1b2f44;font-weight:600;cursor:pointer}
+.btn-primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+.card{background:var(--card);padding:16px;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.metric{font-size:28px;font-weight:700}.muted{color:var(--muted);font-size:14px}
+.ok{color:var(--ok)}.warn{color:var(--warn)}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+.panel{background:var(--card);padding:16px;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.bars{display:flex;align-items:flex-end;gap:10px;height:190px;padding:8px 4px}
+.bar-col{flex:1;display:flex;gap:4px;align-items:flex-end;height:100%}
+.bar{flex:1;border-radius:4px 4px 0 0}.bar.in{background:#4ea81f}.bar.out{background:#f66868}
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+input,select{padding:10px;border:1px solid #c7d3df;border-radius:7px}
+.table{width:100%;border-collapse:collapse}.table th,.table td{padding:10px;border-bottom:1px solid #edf1f5;text-align:left}
+.alert{padding:11px 14px;border-radius:8px;background:#e7f5ff;color:#174b68;margin-bottom:10px}
+@media (max-width:1100px){.app-shell{grid-template-columns:1fr}.sidebar{display:none}.grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}}

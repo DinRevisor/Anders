@@ -1,8 +1,31 @@
 <!DOCTYPE html>
-<html>
-<head><meta charset="utf-8" /><title>Warehouse MVP</title></head>
+<html lang="da">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Anders Warehouse</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
 <body>
-    <nav><a href="/">Dashboard</a> | <a href="/Hangfire">Hangfire</a></nav>
-    <main>@RenderBody()</main>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">☰ <span>WareFlow</span></div>
+        <a class="nav-item" asp-page="/Index">▣ Overblik</a>
+        <a class="nav-item" asp-page="/Produkter">📦 Produkter</a>
+        <a class="nav-item" asp-page="/Fakturaer">🧾 Fakturaer</a>
+        <a class="nav-item" asp-page="/Aftaler">🤝 Aftaler</a>
+        <a class="nav-item" asp-page="/Prisovervaagning">📈 Prisovervågning</a>
+        <a class="nav-item" href="/swagger">🔌 API docs</a>
+        <a class="nav-item" href="/hangfire">⚙ Jobs</a>
+    </aside>
+
+    <div class="main-area">
+        <header class="topbar">
+            <h1>Lagerstyring</h1>
+            <div class="avatar">AB</div>
+        </header>
+        <main class="content">@RenderBody()</main>
+    </div>
+</div>
 </body>
 </html>
